@@ -17,7 +17,6 @@ exports.getArticles = (req, res, next) => {
 
 exports.getUsers = (req, res, next) => {
     gatherUsers().then((users) => {
-        console.log(users)
         res.status(200).send({users: users})
     })
     .catch(next)
