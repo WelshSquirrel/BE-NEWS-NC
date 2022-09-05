@@ -5,3 +5,12 @@ exports.gatherTopics = () => {
         return result.rows;
     })
 }
+
+exports.gatherArticles = (id) => {
+    return db.query('SELECT * FROM articles WHERE article_id = $1', [id])
+    .then((result) => {
+        return result.rows[0];
+    })
+}
+
+
