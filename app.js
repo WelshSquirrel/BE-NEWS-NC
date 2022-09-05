@@ -1,15 +1,15 @@
 const express = require('express')
 
-const { getTopics, getArticles } = require('./controllers/controllers')
+const { getTopics, getArticles, getUsers } = require('./controllers/controllers')
 
 const app = express()
-app.use(express.json());
+
 
 app.get('/api/topics', getTopics);
 
-app.get('/api/articles/:id', getArticles)
+app.get('/api/articles/:id', getArticles);
 
-
+app.get('/api/users', getUsers);
 
 
 
