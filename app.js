@@ -14,8 +14,8 @@ app.get('/api/articles/:id', getArticles)
 
 
 app.use((err, req, res, next) => {
-    const badCodes = ['22P02']
-    if(badCodes.includes(err.code)) {
+    const errorCodes = ['22P02']
+    if(errorCodes.includes(err.code)) {
         res.status(400).send({msg: 'bad request'})
     } else {
         next(err)

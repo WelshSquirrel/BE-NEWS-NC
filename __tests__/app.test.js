@@ -59,10 +59,26 @@ describe('GET /api/articles/:article_id', () => {
     it('should return a 402 not found when given a valid number id that does not exist', () => {
         return request(app)
         .get(`/api/articles/153`)
-        .expect(402)
+        .expect(404)
         .then(({body}) => {
             expect(body).toEqual({msg: 'article ID not found'})
         })
     })
 })
 
+// describe('GET /api/users', () => {
+//     it('should return an array of users with the correct properties ', () => {
+//         return request(app)
+//         .get('/api/users')
+//         .expect(200)
+//         .then(({body}) => {
+//             const { users } = body
+//             expect(Array.isArray(users)).toBe(true)
+//             expect(users.length).toBe(4)
+//             users.forEach((topic) => {
+//                 expect(topic).toHaveProperty('description', expect.any(String))
+//                 expect(topic).toHaveProperty('slug', expect.any(String))
+//             })
+//         })
+//     })
+// })
