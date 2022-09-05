@@ -1,3 +1,3 @@
 Please add environment variables...
 
-Add files named '.env.development' and '.env.test' with text PGDATABASE=<your_database>
+Add files named '.env.development' with text PGDATABASE=nc_news and '.env.test' with text PGDATABASE=nc_news_test

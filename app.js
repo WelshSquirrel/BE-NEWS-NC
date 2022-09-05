@@ -9,6 +9,19 @@ app.get('/api/topics', getTopics);
 
 app.get('/api/articles/:id', getArticles)
 
+
+
+
+
+app.use((err, req, res, next) => {
+    const badCodes = ['22P02']
+    if(badCodes.includes(err.code)) {
+        res.status(400).send({msg: 'bad request'})
+    } else {
+        next(err)
+    }
+})
+
 app.use((err, req, res, next) => {
     if(err.status && err.msg) {
         res.status(err.status).send({msg: err.msg})

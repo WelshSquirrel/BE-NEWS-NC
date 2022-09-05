@@ -48,4 +48,21 @@ describe('GET /api/articles/:article_id', () => {
                 )
         })
     })
+    it('should return a 400 with a bad request if the id is invalid', () => {
+        return request(app)
+        .get(`/api/articles/bad`)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'bad request'})
+        })
+    })
+    it('should return a 402 not found when given a valid number id that does not exist', () => {
+        return request(app)
+        .get(`/api/articles/153`)
+        .expect(402)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'article ID not found'})
+        })
+    })
 })
+
