@@ -17,4 +17,8 @@ exports.gatherArticles = (id) => {
     })
 }
 
-
+exports.gatherUsers = () => {
+    return db.query(`SELECT * FROM users`).then((result) => {
+        return result.rows
+    })
+}
