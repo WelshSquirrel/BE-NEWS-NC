@@ -28,6 +28,7 @@ exports.getArticles = (req, res, next) => {
 
 exports.getUsers = (req, res, next) => {
     gatherUsers().then((users) => {
+<<<<<<< 6-patch-article
             res.status(200).send({
                 users: users
             })
@@ -44,4 +45,9 @@ exports.patchVote = (req, res, next) => {
             })
         })
         .catch(next)
+=======
+        res.status(200).send({users: users})
+    })
+    .catch(next)
+>>>>>>> main
 }
