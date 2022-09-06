@@ -6,7 +6,7 @@ exports.gatherTopics = () => {
     })
 }
 
-exports.gatherArticles = (id) => {
+exports.gatherArticlesById = (id) => {
     return db.query(`SELECT articles.*,
      COUNT(comments.article_id)::int AS comment_count 
      FROM articles 
@@ -51,3 +51,35 @@ exports.changeVote = (votes, id) => {
         }
     })
 }
+
+exports.gatherArticles = (sort_by = 'created_at', sortOrder = 'DESC', topic) => {
+    const validRows = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes', 'comment_count'];
+    if(!validRows.includes(sort_by)) {
+        return Promise.reject({ status:400, msg: 'bad request'})
+    }
+    const validOrders = ['asc', 'desc', 'ASC', 'DESC']
+    if(!validOrders.includes(sortOrder)) {
+        return Promise.reject({ status:400, msg: 'bad request'})
+    }
+    let queryStr = `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count
+    FROM articles 
+    LEFT JOIN comments ON comments.article_id = articles.article_id`
+
+    let queryValues = []
+
+    if (topic) {
+        queryStr += ` WHERE articles.topic = $1`
+        queryValues.push(topic)
+    }
+    
+    queryStr += ` GROUP BY articles.article_id
+    ORDER BY ${sort_by} ${sortOrder}`
+    
+    return db.query(queryStr, queryValues).then(({rows}) => {
+      if(rows.length === 0) {
+        return Promise.reject({ status:400, msg: 'query returned no results'})
+      } else {
+        return rows;
+      }
+    })
+};

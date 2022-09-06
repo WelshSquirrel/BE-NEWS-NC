@@ -1,8 +1,9 @@
 const {
     gatherTopics,
-    gatherArticles,
+    gatherArticlesById,
     gatherUsers,
-    changeVote
+    changeVote,
+    gatherArticles
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -14,11 +15,11 @@ exports.getTopics = (req, res, next) => {
         .catch(next)
 }
 
-exports.getArticles = (req, res, next) => {
+exports.getArticlesById = (req, res, next) => {
     const {
         id
     } = req.params
-    gatherArticles(id).then((article) => {
+    gatherArticlesById(id).then((article) => {
             res.status(200).send({
                 article: article
             })
@@ -44,4 +45,14 @@ exports.patchVote = (req, res, next) => {
             })
         })
         .catch(next)
+}
+
+exports.getArticles = (req, res, next) => {
+    const sort_By = req.query.sort_by
+    const sortOrder = req.query.order
+    const topic = req.query.topic
+    gatherArticles(sort_By, sortOrder, topic).then((articles) => {
+        res.status(200).send({articles})
+    })
+    .catch(next)
 }
