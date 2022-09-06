@@ -36,9 +36,7 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.patchVote = (req, res, next) => {
-    const {
-        article_id
-    } = req.params
+    const { article_id } = req.params
     const votes = req.body
     changeVote(votes, article_id).then((article) => {
             res.status(200).send({
