@@ -204,65 +204,64 @@ describe('PATCH /api/articles', () => {
     });
 })
 
-// describe('GET /api/articles/:article_id/comments', () => {
-//     it('should return an array of topics with the properties slug and description', () => {
-//         return request(app)
-//             .get('/api/articles/5/comments')
-//             .expect(200)
-//             .then(({
-//                 body
-//             }) => {
-//                 const {
-//                     comments
-//                 } = body
-//                 expect(comments).toEqual(
-//                     [{
-//                             comment_id: 14,
-//                             body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
-//                             votes: 16,
-//                             author: "icellusedkars",
-//                             article_id: 5,
-//                             created_at: expect.any(String),
-//                         },
-//                         {
-//                             comment_id: 15,
-//                             body: "I am 100% sure that we're not completely sure.",
-//                             votes: 1,
-//                             author: "butter_bridge",
-//                             article_id: 5,
-//                             created_at: expect.any(String),
-//                         }
-//                     ])
-//             })
+describe('GET /api/articles/:article_id/comments', () => {
+    it('should return an array of topics with the properties slug and description', () => {
+        return request(app)
+            .get('/api/articles/5/comments')
+            .expect(200)
+            .then(({
+                body
+            }) => {
+                const {
+                    comments
+                } = body
+                expect(comments).toEqual(
+                    [{
+                            comment_id: 14,
+                            body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+                            votes: 16,
+                            author: "icellusedkars",
+                            article_id: 5,
+                            created_at: expect.any(String),
+                        },
+                        {
+                            comment_id: 15,
+                            body: "I am 100% sure that we're not completely sure.",
+                            votes: 1,
+                            author: "butter_bridge",
+                            article_id: 5,
+                            created_at: expect.any(String),
+                        }
+                    ])
+            })
 
-//     })
-//     it('returns an empty array when the specific id has no comments', () => {
-//         return request(app).get(`/api/articles/7/comments`)
-//             .expect(200)
-//             .then(({
-//                 body
-//             }) => {
-//                 const {
-//                     comments
-//                 } = body
-//                 expect(comments).toEqual([])
-//             })
-//     });
-//     it('should return a 404 if the id is valid but not found', () => {
-//         return request(app)
-//             .get(`/api/articles/1444/comments`)
-//             .expect(404)
-//             .then(({
-//                 body
-//             }) => {
-//                 expect({
-//                     body
-//                 }).toEqual({
-//                     msg: 'article ID not found'
-//                 })
-//             })
-//     })
-
-// })
+    })
+    it('returns an empty array when the specific id has no comments', () => {
+        return request(app).get(`/api/articles/7/comments`)
+            .expect(200)
+            .then(({
+                body
+            }) => {
+                const {
+                    comments
+                } = body
+                expect(comments).toEqual([])
+            })
+    });
+    it('should return a 400 if the id is invalid ', () => {
+        return request(app)
+            .get(`/api/articles/bad/comments`)
+            .expect(400)
+            .then(({
+                body
+            }) => {
+                expect({
+                    body
+                }).toEqual({
+                    msg: 'bad request'
+                })
+            })
+    })
+})
 
 
