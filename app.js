@@ -4,7 +4,8 @@ const {
     getTopics,
     getArticles,
     getUsers,
-    patchVote
+    patchVote,
+    getArticleComments
 } = require('./controllers/controllers')
 
 const app = express()
@@ -18,6 +19,7 @@ app.get('/api/users', getUsers);
 
 app.patch('/api/articles/:article_id', patchVote);
 
+app.get('/api/articles/:article_id/comments', getArticleComments)
 
 app.use((err, req, res, next) => {
     const errorCodes = ['22P02']

@@ -2,7 +2,8 @@ const {
     gatherTopics,
     gatherArticles,
     gatherUsers,
-    changeVote
+    changeVote,
+    gatherArticleComments
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -44,4 +45,11 @@ exports.patchVote = (req, res, next) => {
             })
         })
         .catch(next)
+}
+
+exports.getArticleComments = (req, res, next) => {
+    const { article_id } = req.params
+    gatherArticleComments(article_id).then((comments) => {
+        res.status(200).send({comments: comments})
+    })
 }
