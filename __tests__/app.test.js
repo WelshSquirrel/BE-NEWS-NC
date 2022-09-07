@@ -222,7 +222,6 @@ describe('GET /api/articles', () => {
                         title: expect.any(String),
                         topic: expect.any(String),
                         author: expect.any(String),
-                        body: expect.any(String),
                         created_at: expect.any(String),
                         votes: expect.any(Number),
                         comment_count: expect.any(Number),
@@ -263,12 +262,22 @@ describe('GET /api/articles', () => {
             expect(articles).toBeSortedBy('article_id', {descending: true})
         })
     })
+    it('returns an array of articles ordered by by descending order', () => {
+        return request(app).get(`/api/articles/?order=DESC`)
+        .expect(200)
+        .then(({body}) => {
+            const { articles } = body
+            expect(articles.length).toBe(12)
+            expect(articles).toBeSorted({descending: true})
+        })
+    });
     it('returns array of articles sorted by descending order with specified topic', () => {
         const query = '?topic=cats'
         return request(app).get(`/api/articles${query}`)
         .expect(200)
         .then(({body}) => {
             const { articles } = body
+            expect(articles.length).toBe(1)
             expect(articles).toEqual([
                 {
                     article_id:5,
@@ -283,4 +292,23 @@ describe('GET /api/articles', () => {
             ])
         })
     });
+    it('should return a 404 error when topic is not an existing column name', () => {
+        const query = '?topic=music'
+        return request(app)
+        .get(`/api/articles${query}`)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe(`music not found`)
+        })
+    })
+    it('should return a 200 status with no articles found when topic is an existing column name', () => {
+        const query = '?topic=paper'
+        return request(app)
+        .get(`/api/articles${query}`)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.msg).toBe('No articles found')
+        })
+    })
+
 })

@@ -37,7 +37,9 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.patchVote = (req, res, next) => {
-    const { article_id } = req.params
+    const {
+        article_id
+    } = req.params
     const votes = req.body
     changeVote(votes, article_id).then((article) => {
             res.status(200).send({
@@ -52,7 +54,15 @@ exports.getArticles = (req, res, next) => {
     const sortOrder = req.query.order
     const topic = req.query.topic
     gatherArticles(sort_By, sortOrder, topic).then((articles) => {
-        res.status(200).send({articles})
+        res.status(200).send({ articles })
     })
     .catch(next)
 }
+
+// return db.query(`SELECT * FROM topics WHERE slug = $1`, [topic]).then((result) => {
+//     if (result.rows.length === 0) {
+//         return Promise.all({
+//             status: 404,
+//             msg: 'topic not found'
+//         })
+//     } else {
