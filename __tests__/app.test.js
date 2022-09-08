@@ -209,10 +209,10 @@ describe('GET /api/articles/:article_id/comments', () => {
     it('should return an array of topics with the properties slug and description', () => {
         return request(app)
             .get('/api/articles/5/comments')
-                    comments
-                } = body
-                expect(comments.length).toBe(2)
-                expect(comments).toEqual(
+            .expect(200)
+            .then(({body}) => {
+                expect(body.comments.length).toBe(2)
+                expect(body.comments).toEqual(
                     [{
                             comment_id: 14,
                             body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
@@ -231,7 +231,6 @@ describe('GET /api/articles/:article_id/comments', () => {
                         }
                     ])
             })
-
     })
     it('returns an empty array when the specific id has no comments', () => {
         return request(app).get(`/api/articles/7/comments`)
@@ -267,6 +266,9 @@ describe('GET /api/articles/:article_id/comments', () => {
         })
     });
 })
+
+
+
 
 describe('GET /api/articles', () => {
     it('returns an array of article objects with the correct properties', () => {
