@@ -52,6 +52,24 @@ exports.changeVote = (votes, id) => {
     })
 }
 
+
+exports.gatherArticleComments = (article_id) => {
+    return db.query(`SELECT comments.*, articles.article_id 
+    FROM articles 
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    WHERE articles.article_id = $1`, [article_id])
+        .then((result) => {
+            if (result.rowCount === 0) {
+                return Promise.reject({
+                    status: 404,
+                    msg: 'Route not found'
+                })
+            } else {
+                return result.rows.filter(x => x.comment_id)
+            }
+        })
+}
+
 exports.gatherArticles = (sort_by = 'created_at', sortOrder = 'DESC', topic) => {
 
     const validRows = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes', 'comment_count'];
@@ -122,3 +140,4 @@ exports.gatherArticles = (sort_by = 'created_at', sortOrder = 'DESC', topic) => 
             }
         })
 };
+

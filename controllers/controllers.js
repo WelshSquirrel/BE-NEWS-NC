@@ -3,6 +3,7 @@ const {
     gatherArticlesById,
     gatherUsers,
     changeVote,
+    gatherArticleComments,
     gatherArticles
 } = require('../models/models')
 
@@ -49,6 +50,15 @@ exports.patchVote = (req, res, next) => {
         .catch(next)
 }
 
+
+exports.getArticleComments = (req, res, next) => {
+    const { article_id } = req.params
+    gatherArticleComments(article_id).then((comments) => {
+        res.status(200).send({comments: comments})
+    })
+    .catch(next)
+}
+
 exports.getArticles = (req, res, next) => {
     const sort_By = req.query.sort_by
     const sortOrder = req.query.order
@@ -59,10 +69,3 @@ exports.getArticles = (req, res, next) => {
     .catch(next)
 }
 
-// return db.query(`SELECT * FROM topics WHERE slug = $1`, [topic]).then((result) => {
-//     if (result.rows.length === 0) {
-//         return Promise.all({
-//             status: 404,
-//             msg: 'topic not found'
-//         })
-//     } else {

@@ -5,6 +5,7 @@ const {
     getArticlesById,
     getUsers,
     patchVote,
+    getArticleComments,
     getArticles
 } = require('./controllers/controllers')
 
@@ -19,11 +20,15 @@ app.get('/api/users', getUsers);
 
 app.patch('/api/articles/:article_id', patchVote);
 
+
+app.get('/api/articles/:article_id/comments', getArticleComments)
+
 app.get('/api/articles', getArticles)
 
 
+
 app.use((err, req, res, next) => {
-    const errorCodes = ['22P02']
+    const errorCodes = ['22P02', '23502']
     if (errorCodes.includes(err.code)) {
         res.status(400).send({
             msg: 'bad request'
