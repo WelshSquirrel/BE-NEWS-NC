@@ -114,7 +114,7 @@ exports.gatherArticles = (sort_by = 'created_at', sortOrder = 'DESC', topic) => 
                 } else {
                     return Promise.reject({
                         status: 200,
-                        msg: 'No articles found'
+                        msg: []
                     })
                 }
             } else {

@@ -262,13 +262,13 @@ describe('GET /api/articles', () => {
             expect(articles).toBeSortedBy('article_id', {descending: true})
         })
     })
-    it('returns an array of articles ordered by by descending order', () => {
-        return request(app).get(`/api/articles/?order=DESC`)
+    it('returns an array of articles ordered by by ascending order', () => {
+        return request(app).get(`/api/articles/?order=ASC`)
         .expect(200)
         .then(({body}) => {
             const { articles } = body
             expect(articles.length).toBe(12)
-            expect(articles).toBeSorted({descending: true})
+            expect(articles).toBeSorted({ascending: true})
         })
     });
     it('returns array of articles sorted by descending order with specified topic', () => {
@@ -301,13 +301,13 @@ describe('GET /api/articles', () => {
             expect(body.msg).toBe(`music not found`)
         })
     })
-    it('should return a 200 status with no articles found when topic is an existing column name', () => {
+    it('should return a 200 status with an empty array when topic is an existing topic but has no comments', () => {
         const query = '?topic=paper'
         return request(app)
         .get(`/api/articles${query}`)
         .expect(200)
         .then(({body}) => {
-            expect(body.msg).toBe('No articles found')
+            expect(body.msg).toEqual([])
         })
     })
 
