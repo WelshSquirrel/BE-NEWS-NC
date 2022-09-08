@@ -215,6 +215,7 @@ describe('GET /api/articles/:article_id/comments', () => {
                 const {
                     comments
                 } = body
+                expect(comments.length).toBe(2)
                 expect(comments).toEqual(
                     [{
                             comment_id: 14,
