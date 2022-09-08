@@ -378,3 +378,24 @@ describe('GET /api/articles', () => {
     })
 
 })
+
+describe('POST /api/articles/:article_id/comments', () => {
+    it('responds with an object containing the correct properties', () => {
+        const id = 4
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'this is a new comment'
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(201)
+        .then(({body}) => {
+            expect(body).toMatchObject({
+                article_id: 4,
+                author: 'butter_bridge',
+                body: 'this is a new comment'
+            })
+        })
+    })
+})
