@@ -192,10 +192,123 @@ describe('PATCH /api/articles', () => {
     it('should return a 400 bad request if votes are empty or invalid ', () => {
         const updatedVote = {}
         return request(app).patch(`/api/articles/4`)
-        .send(updatedVote)
-        .expect(400)
+            .send(updatedVote)
+            .expect(400)
+            .then(({
+                body
+            }) => {
+                expect(body).toEqual({
+                    msg: "bad request"
+                })
+            })
+    });
+})
+
+describe('GET /api/articles', () => {
+    it('returns an array of article objects with the correct properties', () => {
+        return request(app)
+            .get(`/api/articles`)
+            .expect(200)
+            .then(({
+                body
+            }) => {
+                const {
+                    articles
+                } = body
+                expect(articles).toBeInstanceOf(Array)
+                expect(articles.forEach((article) => {
+                    expect(article).toEqual(expect.objectContaining({
+                        article_id: expect.any(Number),
+                        title: expect.any(String),
+                        topic: expect.any(String),
+                        author: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number),
+                    }))
+                }))
+            })
+    })
+    it('returns the articles by date in descending order when no sort_by or sortOrder is provided', () => {
+        return request(app).get('/api/articles')
+        .expect(200)
         .then(({body}) => {
-            expect(body).toEqual({msg : "bad request"})
+            const { articles } = body
+            expect(articles).toBeSortedBy('created_at', {descending: true})
         })
     });
+    it('should return a 400 error when sort_By is not an existing validRow', () => {
+        return request(app)
+        .get('/api/articles?sort_by=notcollumn')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    it('should return a 400 error when sort_Order is not an existing validOrder', () => {
+        return request(app)
+        .get('/api/articles?order=gdfgf')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    it('returns all objects sorted by the provided column name', () => {
+        return request(app)
+        .get('/api/articles?sort_by=article_id')
+        .expect(200)
+        .then(({ body })=>{
+            const { articles } = body
+            expect(articles).toBeSortedBy('article_id', {descending: true})
+        })
+    })
+    it('returns an array of articles ordered by by ascending order', () => {
+        return request(app).get(`/api/articles/?order=ASC`)
+        .expect(200)
+        .then(({body}) => {
+            const { articles } = body
+            expect(articles.length).toBe(12)
+            expect(articles).toBeSorted({ascending: true})
+        })
+    });
+    it('returns array of articles sorted by descending order with specified topic', () => {
+        const query = '?topic=cats'
+        return request(app).get(`/api/articles${query}`)
+        .expect(200)
+        .then(({body}) => {
+            const { articles } = body
+            expect(articles.length).toBe(1)
+            expect(articles).toEqual([
+                {
+                    article_id:5,
+                    title: "UNCOVERED: catspiracy to bring down democracy",
+                    topic: "cats",
+                    author: "rogersop",
+                    body: "Bastet walks amongst us, and the cats are taking arms!",
+                    created_at: expect.any(String),
+                    votes: 0,
+                    comment_count: 2,
+                  }
+            ])
+        })
+    });
+    it('should return a 404 error when topic is not an existing column name', () => {
+        const query = '?topic=music'
+        return request(app)
+        .get(`/api/articles${query}`)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe(`music not found`)
+        })
+    })
+    it('should return a 200 status with an empty array when topic is an existing topic but has no comments', () => {
+        const query = '?topic=paper'
+        return request(app)
+        .get(`/api/articles${query}`)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.msg).toEqual([])
+        })
+    })
+
 })
