@@ -255,9 +255,9 @@ describe('GET /api/articles/:article_id/comments', () => {
             .then(({
                 body
             }) => {
-                expect({
+                expect(
                     body
-                }).toEqual({
+                ).toEqual({
                     msg: 'bad request'
                 })
             })

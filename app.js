@@ -21,9 +21,9 @@ app.patch('/api/articles/:article_id', patchVote);
 
 app.get('/api/articles/:article_id/comments', getArticleComments)
 
+
 app.use((err, req, res, next) => {
-    const errorCodes = ['22P02']
-    console.log(err.code)
+    const errorCodes = ['22P02', '23502']
     if (errorCodes.includes(err.code)) {
         res.status(400).send({
             msg: 'bad request'
