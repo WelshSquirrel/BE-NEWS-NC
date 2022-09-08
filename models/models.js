@@ -53,9 +53,18 @@ exports.changeVote = (votes, id) => {
 }
 
 exports.gatherArticleComments = (article_id) => {
-        return db.query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+    return db.query(`SELECT comments.*, articles.article_id 
+    FROM articles 
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    WHERE articles.article_id = $1`, [article_id])
         .then((result) => {
-        return result.rows;
-    });
+            if (result.rowCount === 0) {
+                return Promise.reject({
+                    status: 404,
+                    msg: 'Route not found'
+                })
+            } else {
+                return result.rows.filter(x => x.comment_id)
+            }
+        })
 }
-

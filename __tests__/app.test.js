@@ -263,6 +263,13 @@ describe('GET /api/articles/:article_id/comments', () => {
                 })
             })
     })
+    it('returns 404 route not found when passed a valid ID that does not exist', () => {
+        return request(app).get(`/api/articles/476/comments`)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'Route not found'})
+        })
+    });
 })
 
 
