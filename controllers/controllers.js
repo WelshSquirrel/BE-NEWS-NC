@@ -1,9 +1,10 @@
 const {
     gatherTopics,
-    gatherArticles,
+    gatherArticlesById,
     gatherUsers,
     changeVote,
-    gatherArticleComments
+    gatherArticleComments,
+    gatherArticles
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -15,11 +16,11 @@ exports.getTopics = (req, res, next) => {
         .catch(next)
 }
 
-exports.getArticles = (req, res, next) => {
+exports.getArticlesById = (req, res, next) => {
     const {
         id
     } = req.params
-    gatherArticles(id).then((article) => {
+    gatherArticlesById(id).then((article) => {
             res.status(200).send({
                 article: article
             })
@@ -37,7 +38,9 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.patchVote = (req, res, next) => {
-    const { article_id } = req.params
+    const {
+        article_id
+    } = req.params
     const votes = req.body
     changeVote(votes, article_id).then((article) => {
             res.status(200).send({
@@ -47,6 +50,7 @@ exports.patchVote = (req, res, next) => {
         .catch(next)
 }
 
+
 exports.getArticleComments = (req, res, next) => {
     const { article_id } = req.params
     gatherArticleComments(article_id).then((comments) => {
@@ -54,3 +58,14 @@ exports.getArticleComments = (req, res, next) => {
     })
     .catch(next)
 }
+
+exports.getArticles = (req, res, next) => {
+    const sort_By = req.query.sort_by
+    const sortOrder = req.query.order
+    const topic = req.query.topic
+    gatherArticles(sort_By, sortOrder, topic).then((articles) => {
+        res.status(200).send({ articles })
+    })
+    .catch(next)
+}
+
