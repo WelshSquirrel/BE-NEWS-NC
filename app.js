@@ -7,6 +7,7 @@ const {
     patchVote,
     getArticleComments,
     getArticles,
+    deleteComments,
     postComment
 } = require('./controllers/controllers')
 
@@ -26,7 +27,10 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 
 app.get('/api/articles', getArticles)
 
+app.delete('/api/comments/:comment_id', deleteComments)
+
 app.post('/api/articles/:article_id/comments', postComment)
+
 
 
 

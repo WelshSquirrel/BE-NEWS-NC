@@ -379,6 +379,38 @@ describe('GET /api/articles', () => {
 
 })
 
+
+describe('DELETE /api/comments/:comment_id', () => {
+    it('returns a 204 with no content body', () => {
+        return request(app)
+        .delete(`/api/comments/6`)
+        .expect(204)
+        .then(({body}) => {
+            expect(body).toEqual({})
+        })
+    })
+    it('returns 404 when comment_id is valid but not in the database', () => {
+        return request(app)
+        .delete(`/api/comments/45`)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({
+                msg: 'comment not found'
+            })
+        })
+    })
+    it('returns 400 when comment_id is invalid', () => {
+        return request(app)
+        .delete(`/api/comments/bad`)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({
+                msg: 'bad request'
+            })
+        })
+    })
+});
+
 describe('POST /api/articles/:article_id/comments', () => {
     it('responds with an object containing the correct properties', () => {
         const id = 4
@@ -455,3 +487,4 @@ describe('POST /api/articles/:article_id/comments', () => {
         })
     });
 })
+

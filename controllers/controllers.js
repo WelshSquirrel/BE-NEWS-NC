@@ -4,6 +4,8 @@ const {
     gatherUsers,
     changeVote,
     gatherArticleComments,
+    gatherArticles,
+    removeComments,
     gatherArticles, 
     insertComment,
     checkArticleIdExists,
@@ -68,6 +70,15 @@ exports.getArticles = (req, res, next) => {
     const topic = req.query.topic
     gatherArticles(sort_By, sortOrder, topic).then((articles) => {
         res.status(200).send({ articles })
+    })
+    .catch(next)
+}
+
+
+exports.deleteComments = (req, res, next) => {
+    const { comment_id }= req.params
+    removeComments(comment_id).then((result) => {
+        res.status(204).send({result})
     })
     .catch(next)
 }
