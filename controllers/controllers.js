@@ -77,7 +77,7 @@ exports.postComment = (req, res, next) => {
     const  comment  = req.body
     const username = req.body.username
     Promise.all([checkArticleIdExists(article_id), checkUserExists(username), insertComment(comment, article_id)]).then(([, , comment]) => {
-        res.status(201).send(comment)
+        res.status(201).send({comment})
     })
     .catch(next)
 }

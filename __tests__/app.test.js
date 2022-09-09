@@ -390,8 +390,8 @@ describe('POST /api/articles/:article_id/comments', () => {
         .post(`/api/articles/${id}/comments`)
         .send(newComment)
         .expect(201)
-        .then(({body}) => {
-            expect(body).toMatchObject({
+        .then(({ body }) => {
+            expect(body.comment).toMatchObject({
                 article_id: 4,
                 author: 'butter_bridge',
                 body: 'this is a new comment'
