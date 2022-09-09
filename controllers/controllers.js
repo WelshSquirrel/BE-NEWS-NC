@@ -4,7 +4,8 @@ const {
     gatherUsers,
     changeVote,
     gatherArticleComments,
-    gatherArticles
+    gatherArticles,
+    removeComments
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -69,3 +70,10 @@ exports.getArticles = (req, res, next) => {
     .catch(next)
 }
 
+exports.deleteComments = (req, res, next) => {
+    const { comment_id }= req.params
+    removeComments(comment_id).then((result) => {
+        res.status(204).send({result})
+    })
+    .catch(next)
+}

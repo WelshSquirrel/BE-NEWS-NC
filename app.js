@@ -6,7 +6,8 @@ const {
     getUsers,
     patchVote,
     getArticleComments,
-    getArticles
+    getArticles,
+    deleteComments
 } = require('./controllers/controllers')
 
 const app = express()
@@ -24,6 +25,8 @@ app.patch('/api/articles/:article_id', patchVote);
 app.get('/api/articles/:article_id/comments', getArticleComments)
 
 app.get('/api/articles', getArticles)
+
+app.delete('/api/comments/:comment_id', deleteComments)
 
 
 
