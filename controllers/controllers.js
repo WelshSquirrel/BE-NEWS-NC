@@ -4,7 +4,10 @@ const {
     gatherUsers,
     changeVote,
     gatherArticleComments,
-    gatherArticles
+    gatherArticles, 
+    insertComment,
+    checkArticleIdExists,
+    checkUserExists
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -65,6 +68,16 @@ exports.getArticles = (req, res, next) => {
     const topic = req.query.topic
     gatherArticles(sort_By, sortOrder, topic).then((articles) => {
         res.status(200).send({ articles })
+    })
+    .catch(next)
+}
+
+exports.postComment = (req, res, next) => {
+    const  article_id  = req.params.article_id
+    const  comment  = req.body
+    const username = req.body.username
+    Promise.all([checkArticleIdExists(article_id), checkUserExists(username), insertComment(comment, article_id)]).then(([, , comment]) => {
+        res.status(201).send({comment})
     })
     .catch(next)
 }
