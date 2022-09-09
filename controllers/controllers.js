@@ -5,7 +5,11 @@ const {
     changeVote,
     gatherArticleComments,
     gatherArticles,
-    removeComments
+    removeComments,
+    gatherArticles, 
+    insertComment,
+    checkArticleIdExists,
+    checkUserExists
 } = require('../models/models')
 
 exports.getTopics = (req, res, next) => {
@@ -70,6 +74,7 @@ exports.getArticles = (req, res, next) => {
     .catch(next)
 }
 
+
 exports.deleteComments = (req, res, next) => {
     const { comment_id }= req.params
     removeComments(comment_id).then((result) => {
@@ -77,3 +82,14 @@ exports.deleteComments = (req, res, next) => {
     })
     .catch(next)
 }
+
+exports.postComment = (req, res, next) => {
+    const  article_id  = req.params.article_id
+    const  comment  = req.body
+    const username = req.body.username
+    Promise.all([checkArticleIdExists(article_id), checkUserExists(username), insertComment(comment, article_id)]).then(([, , comment]) => {
+        res.status(201).send({comment})
+    })
+    .catch(next)
+}
+

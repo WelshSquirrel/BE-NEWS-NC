@@ -379,6 +379,7 @@ describe('GET /api/articles', () => {
 
 })
 
+
 describe('DELETE /api/comments/:comment_id', () => {
     it('returns a 204 with no content body', () => {
         return request(app)
@@ -409,3 +410,81 @@ describe('DELETE /api/comments/:comment_id', () => {
         })
     })
 });
+
+describe('POST /api/articles/:article_id/comments', () => {
+    it('responds with an object containing the correct properties', () => {
+        const id = 4
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'this is a new comment'
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(201)
+        .then(({ body }) => {
+            expect(body.comment).toMatchObject({
+                article_id: 4,
+                author: 'butter_bridge',
+                body: 'this is a new comment'
+            })
+        })
+    })
+    it('responds with 404 if given an id that is valid but does not exist', () => {
+        const id = 456
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'this is a new comment'
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'article not found'})   
+        })
+    });
+    it('responds with 400 bad request when given an invalid ID', () => {
+        const id = 'bad'
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'this is a new comment'
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'bad request'})   
+        })
+    });
+    it('responds with a 404 user not found when username does not exist', () => {
+        const id = 3
+        const newComment = {
+            username: "Big_Lebowski",
+            body: "this is a new comment"
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then(({body}) => {
+            expect(body).toEqual({msg: 'user not found'})   
+        })
+    });
+    it('returns 400 bad request if request body is invalid or missing', () => {
+        const id = 4
+        const newComment = {
+            username: "butter_bridge",
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg : 'bad request'})
+
+        })
+    });
+})
+

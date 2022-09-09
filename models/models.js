@@ -148,3 +148,31 @@ exports.removeComments = (comment_id) => {
             }
     })
 }
+
+exports.insertComment = ( comment, article_id) => {
+    const { body, username } = comment
+    return db.query(`INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *`, [body, username, article_id]).then((result) => {
+        return result.rows[0]
+    })
+}
+
+exports.checkArticleIdExists = (id) => {
+    return db
+      .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
+      .then((result) => {
+        if (!result.rows.length) {
+          return Promise.reject({ status: 404, msg: "article not found" });
+        }
+      });
+};
+
+exports.checkUserExists = (username) => {
+    return db
+      .query(`SELECT * FROM articles WHERE author = $1`, [username])
+      .then((result) => {
+        if (!result.rows.length) {
+          return Promise.reject({ status: 404, msg: "user not found" });
+        }
+      });
+  };
+
