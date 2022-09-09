@@ -23,5 +23,76 @@
         }
       ]
     }
-  }
+  },
+  "GET /api/articles/:article_id": { 
+      "description": "serves an article object from the given article_id",
+      "queries": [],
+      "exampleResponse": { "article": {
+        "article_id": 4,
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "expect.any(String)",
+        "votes": 0
+      }
+      }
+  },
+  "PATCH /api/articles/:article_id": {
+		"description": "Updates the votes of an article and returns the updated article to client",
+		"queries": [],
+		"examplePatch": { "inc_votes": 50 },
+    "exampleResponse": {
+      "article": {
+        "article_id": 4,
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "expect.any(String)",
+        "votes": 50
+    }
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+		"description": "serves an array with comments for the specified article",
+		"queries": ["sort_by", "order"],
+		"exampleResponse": {
+      "comments": [{
+        "comment_id": 14,
+        "body": "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+        "votes": 16,
+        "author": "icellusedkars",
+        "article_id": 5,
+        "created_at": "expect.any(String)"
+      },
+      {
+        "comment_id": 15,
+        "body": "I am 100% sure that we're not completely sure.",
+        "votes": 1,
+        "author": "butter_bridge",
+        "article_id": 5,
+        "created_at": "expect.any(String)"
+      }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+		"description": "Posts a comment for the specified article",
+		"queries": [],
+		"examplePost": {
+      "username": "butter_bridge",
+            "body": "this is a new comment"
+    },
+    "example response": {
+      "comment": {
+        "article_id": 4,
+                "author": "butter_bridge",
+                "body": "this is a new comment"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+		"description": "Deletes the comment and sends a 204 response with no content to client"
+	}
 }
