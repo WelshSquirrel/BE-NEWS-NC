@@ -379,7 +379,7 @@ describe('GET /api/articles', () => {
 
 })
 
-describe.only('POST /api/articles/:article_id/comments', () => {
+describe('POST /api/articles/:article_id/comments', () => {
     it('responds with an object containing the correct properties', () => {
         const id = 4
         const newComment = {
@@ -409,7 +409,7 @@ describe.only('POST /api/articles/:article_id/comments', () => {
         .send(newComment)
         .expect(404)
         .then(({body}) => {
-            expect(body).toEqual({msg: 'route not found'})   
+            expect(body).toEqual({msg: 'article not found'})   
         })
     });
     it('responds with 400 bad request when given an invalid ID', () => {
@@ -438,6 +438,20 @@ describe.only('POST /api/articles/:article_id/comments', () => {
         .expect(404)
         .then(({body}) => {
             expect(body).toEqual({msg: 'user not found'})   
+        })
+    });
+    it('returns 400 bad request if request body is invalid or missing', () => {
+        const id = 4
+        const newComment = {
+            username: "butter_bridge",
+        }
+        return request(app)
+        .post(`/api/articles/${id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body).toEqual({msg : 'bad request'})
+
         })
     });
 })

@@ -153,7 +153,7 @@ exports.checkArticleIdExists = (id) => {
       .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
       .then((result) => {
         if (!result.rows.length) {
-          return Promise.reject({ status: 404, msg: "route not found" });
+          return Promise.reject({ status: 404, msg: "article not found" });
         }
       });
 };
