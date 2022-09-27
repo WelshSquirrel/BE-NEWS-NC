@@ -41,5 +41,5 @@
       "jest-extended/all",
       "jest-sorted"
     ]
-  }
+  } 
 }
